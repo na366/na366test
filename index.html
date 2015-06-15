@@ -1,0 +1,60 @@
+<html>
+<head>
+<script language='javascript'>
+enemyList = new Array();
+tamaList = new Array();
+setInterval(function(){tamaList.map(check(x));}, 1);
+function check(x)
+{
+  for(var i=0;i<enemyList.length;i++)
+  {
+    if(parseInt(x.style.top, 10) - parseInt(enemyList[i].style.top, 10) < 300)
+      document.body.removeChild(x);
+  }
+}
+document.onkeydown = function(event)
+{
+  if(Math.random()*10 > 8)
+  {
+    var enemy = create("敵", document.getElementById("enemy"));
+    enemyList.push(enemy);
+    setInterval(function(){move(enemy, function(x){return x > 500;}, 1);}, 1);
+  }
+  if(event.keyCode == 37)
+    document.getElementById("me").style.left = "8px";
+  if(event.keyCode == 39)
+    document.getElementById("me").style.left = "200px";
+  if(event.keyCode == 32)
+  {
+    var tama = create("↑", document.getElementById("me"));
+    tamaList.push(tama);
+    setInterval(function(){move(tama, function(x){return x < 50;}, -1);}, 1);
+  }
+}
+function create(mark, baseEle)
+{
+  var ele = document.createElement("div");
+  ele.style.position = "absolute";
+  ele.style.top = baseEle.style.top;
+  ele.style.left = baseEle.style.left;
+  ele.appendChild(document.createTextNode(mark));
+  document.body.appendChild(ele);
+  return ele;
+} 
+function move(ele, judge, per)
+{
+  var x = parseInt(ele.style.top, 10);
+  if(judge(x))
+  {
+    document.body.removeChild(ele);
+  }
+  else
+    ele.style.top = String(x + per) + "px";
+}
+</script>
+</head>
+<body>
+<div id="enemy" style="left:1px;top:1px"></div>
+<div id="me" style="position:absolute;top:500px">a</div>
+</body>
+</html>
